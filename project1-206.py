@@ -3,8 +3,27 @@ import filecmp
 from dateutil.relativedelta import *
 from datetime import date
 
-
+inFileA = open('P1DataA.csv','r')
+outfile = open('outfile.csv','w')
+inFileB = open('P1DataB.csv','r')
 def getData(file):
+	line = inFileA.readline()
+	lineDict = {}
+	dictList = []
+	while line:
+		cells = line.split(',')
+		firstName = cells[0]
+		lastName = cells[1]
+		email = cells[2]
+		grade = cells[3]
+		DOB = cells[4]
+		lineDict['First'] = firstName
+		lineDict['Last'] = lastName
+		lineDict['Email'] = email
+		lineDict['Class'] = grade
+		lineDict['DOB'] = DOB
+		dictList.append(lineDict)
+	return dictList
 # get a list of dictionary objects from the file
 #Input: file name
 #Ouput: return a list of dictionary objects where

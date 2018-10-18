@@ -1,28 +1,24 @@
 import os
 import filecmp
 from dateutil.relativedelta import *
-from datetime import date
-
-inFileA = open('P1DataA.csv','r')
-outfile = open('outfile.csv','w')
-inFileB = open('P1DataB.csv','r')
+from datetime import date	
 def getData(file):
-	line = inFileA.readline()
-	lineDict = {}
+	inFile = open(file,'r')
+	headings = inFile.readline()
+	lines = inFile.readlines()
+	categories = headings.split(",")
+	inFile.close()
 	dictList = []
-	while line:
-		cells = line.split(',')
-		firstName = cells[0]
-		lastName = cells[1]
-		email = cells[2]
-		grade = cells[3]
-		DOB = cells[4]
-		lineDict['First'] = firstName
-		lineDict['Last'] = lastName
-		lineDict['Email'] = email
-		lineDict['Class'] = grade
-		lineDict['DOB'] = DOB
-		dictList.append(lineDict)
+	for n in lines:
+		lineDict = {}
+		cells = n.split(',')
+		lineDict[categories[0]] = cells[0]
+		lineDict[categories[1]] = cells[1]
+		lineDict[categories[2]] = cells[2]
+		lineDict[categories[3]] = cells[3]
+		lineDict[categories[4].strip()] = cells[4].strip()
+		if lineDict not in dictList:
+			dictList.append(lineDict)
 	return dictList
 # get a list of dictionary objects from the file
 #Input: file name
@@ -32,9 +28,13 @@ def getData(file):
 	pass
 
 def mySort(data,col):
-# Sort based on key/column
-#Input: list of dictionaries and col (key) to sort on
-#Output: Return the first item in the sorted list as a string of just: firstName lastName
+	sor = sorted(data, key = lambda x: x[str(col)])
+	new_list = []
+	for x in sor:
+		lastName = x['Last']
+		firstName = x['First']
+		new_list.append(str(firstName + " " + lastName))
+		return list(new_list)[0]
 
 	pass
 

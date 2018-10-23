@@ -99,19 +99,17 @@ def mySortPrint(a,col,fileName):
 	pass
 
 def findAge(a):
-	year = int(2018)
-	all_ages = 0
-	people = 0
-	avg = 0
-	for n in a:
-		people += 1
-		DOB = n["DOB"]
-		DOB_lst = DOB.split("/")
-		birth_year = DOB_lst[2]
-		age = (int(year) - (int(birth_year)))
-		all_ages += age
-		avg = (int(all_ages/people))
-	return avg
+# 	year = int(2018)
+# 	all_ages = 0
+# 	people = 0
+# 	for n in a:
+# 		people += 1
+# 		full_date = n["DOB"].strip("\n")
+# 		birth_year = full_date.split("/")[2]
+# 		age = (int(year) - (int(birth_year)))
+# 		all_ages += age
+# 	print(birth_year)
+# 	return(int(all_ages/people))
 # def findAge(a):
 # Input: list of dictionaries
 # Output: Return the average age of the students and round that age to the nearest

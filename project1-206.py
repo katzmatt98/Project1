@@ -1,44 +1,64 @@
 import os
 import filecmp
 from dateutil.relativedelta import *
-from datetime import date	
+from datetime import date
 def getData(file):
 	inFile = open(file,'r')
-	headings = inFile.readline()
-	lines = inFile.readlines()
-	categories = headings.split(",")
-	inFile.close()
+	lines = inFile.readline()
 	dictList = []
-	for n in lines:
+	while lines:
 		lineDict = {}
-		cells = n.split(',')
-		lineDict[categories[0]] = cells[0]
-		lineDict[categories[1]] = cells[1]
-		lineDict[categories[2]] = cells[2]
-		lineDict[categories[3]] = cells[3]
-		lineDict[categories[4].strip()] = cells[4].strip()
-		if lineDict not in dictList:
-			dictList.append(lineDict)
+		cells = lines.split(',')
+		first = cells[0]
+		last = cells[1]
+		email = cells[2]
+		grade = cells[3]
+		DOB = cells[4]
+		lineDict['First'] = first
+		lineDict['Last'] = last
+		lineDict['Email'] = email
+		lineDict['Class'] = grade
+		lineDict['DOB'] = DOB
+		dictList.append(lineDict)
+		lines = inFile.readline()
 	return dictList
+	inFile.close()
 # get a list of dictionary objects from the file
 #Input: file name
 #Ouput: return a list of dictionary objects where
 #the keys are from the first row in the data. and the values are each of the other rows
 
-	pass
-
 def mySort(data,col):
-	sor = sorted(data, key = lambda x: x[str(col)])
-	new_list = []
-	for x in sor:
-		lastName = x['Last']
-		firstName = x['First']
-		new_list.append(str(firstName + " " + lastName))
-		return list(new_list)[0]
+	sor = sorted(data, key = lambda x: x[(col)])
+	full_name = sor[0]['First'] + ' ' + sor[0]["Last"]
+	return full_name
+# Sort based on key/column
+#Input: list of dictionaries and col (key) to sort on
+#Output: Return the first item in the sorted list as a string of just: firstName lastName
+
 	pass
 
 
 def classSizes(data):
+	all_total = []
+	frosh_tot = 0
+	soph_tot = 0
+	junior_tot = 0
+	senior_tot = 0
+	for grade in data:
+		if grade["Class"] == "Freshman":
+			frosh_tot += 1
+		elif grade['Class'] == 'Sophomore':
+			soph_tot += 1
+		elif grade['Class'] == 'Junior':
+			junior_tot += 1
+		elif grade["Class"] == "Senior":
+			senior_tot += 1
+	all_total.append(('Freshman', frosh_tot))
+	all_total.append(('Sophomore', soph_tot))
+	all_total.append(("Junior", junior_tot))
+	all_total.append(('Senior', senior_tot))
+	return (sorted(all_total, key = lambda n: n[1], reverse = True))
 # Create a histogram
 # Input: list of dictionaries
 # Output: Return a list of tuples sorted by the number of students in that class in
@@ -49,6 +69,15 @@ def classSizes(data):
 
 
 def findMonth(a):
+	b_dict = {}
+	for n in a:
+		month = n["DOB"].split('/')[0]
+		if month not in b_dict:
+			b_dict[month] = 1
+		else:
+			b_dict[month] += 1
+	sor_lst = ((sorted(b_dict, key = lambda x: b_dict[x], reverse = True)))
+	return int(sor_lst[0])
 # Find the most common birth month form this data
 # Input: list of dictionaries
 # Output: Return the month (1-12) that had the most births in the data
@@ -56,6 +85,11 @@ def findMonth(a):
 	pass
 
 def mySortPrint(a,col,fileName):
+	outfile = open(fileName,'w')
+	sor_lst = sorted(a[1:], key = lambda n: n[str(col)])
+	for x in sor_lst:
+		outfile.write('{},{},{}\n'.format(x['First'], x['Last'], x['Email']))
+	outfile.close()
 #Similar to mySort, but instead of returning single
 #Student, the sorted data is saved to a csv file.
 # as fist,last,email
@@ -65,6 +99,19 @@ def mySortPrint(a,col,fileName):
 	pass
 
 def findAge(a):
+	year = int(2018)
+	all_ages = 0
+	people = 0
+	avg = 0
+	for n in a:
+		people += 1
+		DOB = n["DOB"]
+		DOB_lst = DOB.split("/")
+		birth_year = DOB_lst[2]
+		age = (int(year) - (int(birth_year)))
+		all_ages += age
+		avg = (int(all_ages/people))
+	return avg
 # def findAge(a):
 # Input: list of dictionaries
 # Output: Return the average age of the students and round that age to the nearest
